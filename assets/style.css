@@ -1,0 +1,142 @@
+/* Classlingo — Mobile-first dark mode CSS */
+
+/* Hide Streamlit chrome for cleaner mobile experience */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* Mobile-first container */
+.block-container {
+    max-width: 520px !important;
+    padding: 1rem 1rem 4rem 1rem !important;
+    margin: 0 auto;
+}
+
+/* Large touch targets */
+.stButton > button {
+    min-height: 48px !important;
+    font-size: 1.05rem !important;
+    border-radius: 12px !important;
+    font-weight: 500;
+    transition: transform 0.1s ease;
+}
+
+.stButton > button:active {
+    transform: scale(0.97);
+}
+
+/* Primary button styling */
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.stButton > button[kind="primary"]:hover {
+    background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%) !important;
+}
+
+/* MCQ option buttons — full width, left-aligned */
+.stButton > button[kind="secondary"] {
+    text-align: left !important;
+    padding-left: 1.2rem !important;
+    background: rgba(124, 58, 237, 0.08) !important;
+    border: 1px solid rgba(124, 58, 237, 0.25) !important;
+}
+
+.stButton > button[kind="secondary"]:hover {
+    background: rgba(124, 58, 237, 0.15) !important;
+    border-color: rgba(124, 58, 237, 0.5) !important;
+}
+
+/* Metrics styling */
+[data-testid="stMetric"] {
+    background: rgba(124, 58, 237, 0.06);
+    border-radius: 12px;
+    padding: 0.75rem;
+    text-align: center;
+}
+
+[data-testid="stMetricValue"] {
+    font-size: 1.4rem !important;
+}
+
+/* Progress bar */
+.stProgress > div > div {
+    background: linear-gradient(90deg, #7c3aed, #a78bfa) !important;
+    border-radius: 8px;
+}
+
+/* Success/error messages */
+.stSuccess, .stError {
+    border-radius: 12px !important;
+    padding: 1rem !important;
+}
+
+/* Expander styling */
+.streamlit-expanderHeader {
+    font-size: 0.95rem !important;
+    border-radius: 8px;
+}
+
+/* Input fields */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea {
+    border-radius: 10px !important;
+    min-height: 48px !important;
+    font-size: 1rem !important;
+}
+
+/* Select box */
+.stSelectbox > div > div {
+    border-radius: 10px !important;
+    min-height: 48px !important;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    border-radius: 12px;
+}
+
+/* Divider */
+hr {
+    margin: 1.5rem 0 !important;
+    border-color: rgba(124, 58, 237, 0.15) !important;
+}
+
+/* Heading adjustments for mobile */
+h1 {
+    font-size: 1.8rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+h2 {
+    font-size: 1.4rem !important;
+}
+
+h3 {
+    font-size: 1.15rem !important;
+}
+
+/* Sidebar adjustments */
+[data-testid="stSidebar"] {
+    min-width: 200px !important;
+    max-width: 260px !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.3);
+    border-radius: 3px;
+}
+
+/* LaTeX block styling */
+.katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.5rem 0;
+}
