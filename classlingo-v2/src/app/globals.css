@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0a0a0a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0a0a0a;
+  --color-primary: #6d28d9;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #18181b;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #18181b;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-ring: #6d28d9;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-xp: #f59e0b;
+  --color-hearts: #ef4444;
+  --color-streak: #f97316;
+  --radius-lg: 0.75rem;
+  --radius-md: calc(var(--radius-lg) - 2px);
+  --radius-sm: calc(var(--radius-lg) - 4px);
+}
+
+@layer base {
+  .dark {
+    --color-background: #09090b;
+    --color-foreground: #fafafa;
+    --color-card: #18181b;
+    --color-card-foreground: #fafafa;
+    --color-popover: #18181b;
+    --color-popover-foreground: #fafafa;
+    --color-primary: #7c3aed;
+    --color-primary-foreground: #ffffff;
+    --color-secondary: #27272a;
+    --color-secondary-foreground: #fafafa;
+    --color-muted: #27272a;
+    --color-muted-foreground: #a1a1aa;
+    --color-accent: #27272a;
+    --color-accent-foreground: #fafafa;
+    --color-destructive: #dc2626;
+    --color-destructive-foreground: #ffffff;
+    --color-border: #3f3f46;
+    --color-input: #3f3f46;
+    --color-ring: #7c3aed;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* KaTeX overrides for dark mode */
+.dark .katex {
+  color: #fafafa;
+}
+
+/* Mermaid diagram container */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+/* Lesson progress bar animation */
+.progress-fill {
+  transition: width 0.5s ease-in-out;
+}
+
+/* Exercise card animations */
+.exercise-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Feedback panel animation */
+.feedback-enter {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Collapsible details/summary for WES */
+details > summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  padding: 0.5rem 0;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details > summary::before {
+  content: "▶ ";
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+/* Mobile-first touch targets */
+@media (max-width: 640px) {
+  button,
+  [role="button"] {
+    min-height: 44px;
+  }
+}

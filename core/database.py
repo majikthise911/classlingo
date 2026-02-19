@@ -87,7 +87,9 @@ def init_db() -> None:
         hearts_recharged_at TIMESTAMP,
         daily_goal_minutes INTEGER DEFAULT 5,
         llm_provider TEXT DEFAULT 'anthropic',
-        api_key TEXT DEFAULT ''
+        api_key TEXT DEFAULT '',
+        generation_model TEXT DEFAULT '',
+        feedback_model TEXT DEFAULT ''
     );
     """)
     # Ensure user profile row exists
@@ -97,6 +99,12 @@ def init_db() -> None:
             "INSERT INTO user_profile (id, hearts_recharged_at) VALUES (1, ?)",
             (datetime.now(),),
         )
+    # Migrate: add model columns if missing (for existing DBs)
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(user_profile)").fetchall()]
+    if "generation_model" not in cols:
+        conn.execute("ALTER TABLE user_profile ADD COLUMN generation_model TEXT DEFAULT ''")
+    if "feedback_model" not in cols:
+        conn.execute("ALTER TABLE user_profile ADD COLUMN feedback_model TEXT DEFAULT ''")
     conn.commit()
     conn.close()
 

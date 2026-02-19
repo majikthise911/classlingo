@@ -8,39 +8,89 @@ from core.database import get_profile
 
 PROVIDERS = {
     "anthropic": {
-        "generation": "claude-sonnet-4-20250514",
-        "feedback": "claude-haiku-4-5-20251001",
         "package": "anthropic",
+        "models": [
+            "claude-opus-4-6",
+            "claude-sonnet-4-6",
+            "claude-haiku-4-5-20251001",
+            "claude-sonnet-4-5",
+            "claude-opus-4-5",
+        ],
+        "default_generation": "claude-sonnet-4-6",
+        "default_feedback": "claude-haiku-4-5-20251001",
     },
     "openai": {
-        "generation": "gpt-4o",
-        "feedback": "gpt-4o-mini",
         "package": "openai",
+        "models": [
+            "gpt-5.2",
+            "gpt-5.2-pro",
+            "gpt-5",
+            "gpt-5-mini",
+            "gpt-5-nano",
+        ],
+        "default_generation": "gpt-5.2",
+        "default_feedback": "gpt-5-mini",
     },
     "xai": {
-        "generation": "grok-3",
-        "feedback": "grok-3-mini",
         "package": "openai",
         "base_url": "https://api.x.ai/v1",
+        "models": [
+            "grok-4-1-fast-reasoning",
+            "grok-4-1-fast-non-reasoning",
+            "grok-4-fast-reasoning",
+            "grok-4-fast-non-reasoning",
+            "grok-4-0709",
+            "grok-code-fast-1",
+            "grok-3",
+            "grok-3-mini",
+        ],
+        "default_generation": "grok-4-1-fast-reasoning",
+        "default_feedback": "grok-4-fast-non-reasoning",
     },
 }
 
 
+def get_models_for_provider(provider: str) -> list[str]:
+    return PROVIDERS.get(provider, {}).get("models", [])
+
+
+def get_default_models(provider: str) -> tuple[str, str]:
+    cfg = PROVIDERS.get(provider, {})
+    return cfg.get("default_generation", ""), cfg.get("default_feedback", "")
+
+
 class LLMClient:
-    def __init__(self, provider: Optional[str] = None, api_key: Optional[str] = None):
-        if provider is None or api_key is None:
-            profile = get_profile()
-            self.provider = provider or profile.get("llm_provider", "anthropic")
-            self.api_key = api_key or profile.get("api_key", "")
-        else:
-            self.provider = provider
-            self.api_key = api_key
+    def __init__(self, provider: Optional[str] = None, api_key: Optional[str] = None,
+                 generation_model: Optional[str] = None, feedback_model: Optional[str] = None):
+        profile = get_profile()
+
+        self.provider = provider or profile.get("llm_provider", "anthropic")
+        self.api_key = api_key or profile.get("api_key", "")
 
         if not self.api_key:
             raise ValueError("No API key configured. Go to Settings to add one.")
 
         self.config = PROVIDERS[self.provider]
+
+        # Resolve models: explicit arg > DB setting > provider default
+        default_gen, default_fb = get_default_models(self.provider)
+        self.generation_model = (
+            generation_model
+            or profile.get("generation_model")
+            or default_gen
+        )
+        self.feedback_model = (
+            feedback_model
+            or profile.get("feedback_model")
+            or default_fb
+        )
+
         self._client = None
+
+    def _get_model(self, model_tier: str) -> str:
+        if model_tier == "feedback":
+            return self.feedback_model
+        return self.generation_model
 
     def _get_client(self):
         if self._client is not None:
@@ -60,7 +110,7 @@ class LLMClient:
     def generate(self, system_prompt: str, user_prompt: str,
                  model_tier: str = "generation", max_tokens: int = 4096) -> str:
         client = self._get_client()
-        model = self.config[model_tier]
+        model = self._get_model(model_tier)
 
         if self.config["package"] == "anthropic":
             response = client.messages.create(

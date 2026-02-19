@@ -5,6 +5,7 @@ Duolingo-style adaptive micro-learning app that turns your course materials into
 ## Quick Start
 
 ```bash
+cd classliingo
 pip install -r requirements.txt
 streamlit run app.py
 ```
